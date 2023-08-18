@@ -1,5 +1,5 @@
-site_name: TEMPLATE
-edit_uri: https://github.com/bgacademy23/TEMPLATE/blob/main/docs
+site_name: genomescope
+edit_uri: https://github.com/bgacademy23/genomescope/blob/main/docs
 
 nav:
     - Home: README.md
