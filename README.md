@@ -7,6 +7,15 @@ This session is part of [**Biodiversity Genomics Academy 2023**](https://BGA23.o
 Lucía Campos-Domínguez  
 Kamil Jaron
 
+## Programme
+
+- Introduction to k-mer spectra, their interpretation and running GenomeScope (lecture by Lucía, ~30')
+- Ex. 1: Running and understanding genome models (~30')
+- Looking under the hood of the GenomeScope model (lecture by Kamil, ~20')
+- Ex. 2: Running GenomeScope-like model yourself in R; Using GenomeTelescope package (~20')
+- Discussion/Interpretation of wild k-mer spectra (~20')
+    - We will bring a bunch of examples; but feel free to bring your own wild k-mer spoectrum to share with others!
+
 ## Description
 
 By the end of this session you will be able to:
