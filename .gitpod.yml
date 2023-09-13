@@ -8,7 +8,7 @@ tasks:
 #     /workspace/conda/bin/mamba init bash
 
 #     source ${HOME}/.bashrc
-#     mamba create -n gs -c conda-forge r-base r-argparse -y
+#     mamba create -n gs -c conda-forge r-base r-argparse r-minpack.lm -y
     
 - name: activate mamba
   command: |
@@ -17,11 +17,21 @@ tasks:
     /workspace/conda/bin/mamba init bash
 
     source ${HOME}/.bashrc
-    mamba create -n gs -c conda-forge r-base r-argparse -y
+    mamba create -n gs -c conda-forge r-base r-argparse r-minpack.lm -y
   
     # /workspace/conda/bin/mamba init bash
     # source ${HOME}/.bashrc
     mamba activate gs
+
+    mkdir -p /workspace/bin
+
+    git clone https://github.com/tbenavi1/genomescope2.0
+    cd genomescope2.0
+    R -e 'install.packages(".", repos=NULL, type="source")'
+    cd ..
+
+    git clone https://github.com/KamilSJaron/GenomeTelescope
+    cd GenomeTelescope
 
     export PATH=/workspace/bin:"$PATH"
 
