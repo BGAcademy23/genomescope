@@ -14,7 +14,7 @@ Kamil Jaron
 - Looking under the hood of the GenomeScope model (lecture by Kamil, ~20')
 - Ex. 2: Running GenomeScope-like model yourself in R; Using GenomeTelescope package (~20')
 - Discussion/Interpretation of wild k-mer spectra (~20')
-    - We will bring a bunch of examples; but feel free to bring your own wild k-mer spoectrum to share with others!
+    - We will bring a bunch of examples; but feel free to bring your own wild k-mer spectrum to share with others!
 
 ## Description
 
