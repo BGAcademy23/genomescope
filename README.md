@@ -69,36 +69,58 @@ The first column is the coverage, that is how many times a kmer is seen in the s
 ### Fitting genome models to your kmer spectrum using GenomeScope
 Now you have your own generated .hist (SRR3265401) and many others in the `workspace/histograms/` directory to play with.
 Let's start by making sure GenomeScope works fine by typing `genomescope2.0/genomescope.R` from the workspace:
+
 ![Screenshot 2023-09-14 at 23 39 31](https://github.com/BGAcademy23/genomescope/assets/28604909/481a59bf-957b-45d4-a4d4-1ad8a956a173)
 
-As you can see, the only necessary parameters are the input and `-k`. It recommends naming the output directory and specifying the ploidy level, otherwise it is going to assume diploid. There's other parameters such as `-l` and '-m', which we will talk about later.
+As you can see, the only necessary parameters are the input and `-k`. It recommends naming the output directory and specifying the ploidy level (`-p`), otherwise it is going to assume diploid. There's other parameters such as `-l` and '-m', which we will talk about later.
 
-#### example 1
-Once we've made sure GenomeScope is installed and you can make it run, let's start modelling our with our own-generated `SRR3265401.21.kmc.hist` :
-
-```
+#### Example 1
+Let's start with one of the histograms from `workspace/histograms/`: the stick insect *Timema monikensis*. Let's assume we know nothing about its genome, and just run GenomeScope with default parameters:
 
 ```
+genomescope2.0/genomescope.R -i genomescope/hitograms/Timema_monikensis_k21.hist -o Tmonikensis_k21_GS_out -k 21
 
-This is a simple case we show you
+```
+As you can see, after running you will get a printed message with the model fit data:
+```
+GenomeScope analyzing genomescope/hitograms/Timema_monikensis_k21.hist p=2 k=21 outdir=Tmonikensis_k21_GS_out
+aa:99.8% ab:0.157%
+Model converged het:0.00157 kcov:26.3 err:0.00401 model fit:0.866 len:1124307247
+```
+You can find the outputs in the left menu from your gitpod workspace.
+Let's have a look at our histogram `(linear.plot.png)`:
 
-#### example 2
+![Screenshot 2023-09-15 at 00 25 57](https://github.com/BGAcademy23/genomescope/assets/28604909/d0e28749-944a-42c7-bff0-95f8c7bbcb65)
 
-This is more complicated case we show you
+As you can see from our k-mer distribution (blue bars), we have here an extremelly haploid individual. Even though our heterozygosity levels are also very low in our model, we can see it doesn't adjust very well to a "diploid" model because of its extremelly high homozygosity. You can try changing your command to add `-p 1` to see if a haploid model works best. How else does the model change? does genome size estimate change much?
+
+#### Example 2
+
+Let's look at another example, a plant: *Begonia luxurians*. Again, let's assume we know nothing about its genome:
+
+```
+genomescope2.0/genomescope.R -i genomescope/hitograms/Begonia_luxurians_k21.hist -o Bluxurians_k21_GS_out -k 21
+```
+
+
+In this case we have a much more heterozygous genome, and it looks diploid. Looks like the model adjusts just fine. 
+
 
 #### Try it on your own
 
-There are 5 more histogrmas here. Try to fit models right.
+There are a few more histogrmas here. Try to fit the models right. Play with `-p` if necessary 
 
 <details>
 <summary><b> Unfold here to see all the histograms</b></summary>
 
-
+*Bombina sp.* (frog)
+#### 
+####
 </details>
 
 ### Modifying GenomeScope parameters for a better model fit
 
-
+Once we've made sure GenomeScope is installed and you can make it run, let's start modelling our with our own-generated `SRR3265401.21.kmc.hist`
 
 ### Fitting your own model
 
