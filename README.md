@@ -78,12 +78,12 @@ As you can see, the only necessary parameters are the input and `-k`. It recomme
 Let's start with one of the histograms from `workspace/histograms/`: the stick insect *Timema monikensis*. Let's assume we know nothing about its genome, and just run GenomeScope with default parameters:
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/Timema_monikensis_k21.hist -o Tmonikensis_k21_GS_out -k 21
+genomescope2.0/genomescope.R -i genomescope/histograms/Timema_monikensis_k21.hist -o Tmonikensis_k21_GS_out -k 21
 
 ```
 As you can see, after running you will get a printed message with the model fit data:
 ```
-GenomeScope analyzing genomescope/hitograms/Timema_monikensis_k21.hist p=2 k=21 outdir=Tmonikensis_k21_GS_out
+GenomeScope analyzing genomescope/histograms/Timema_monikensis_k21.hist p=2 k=21 outdir=Tmonikensis_k21_GS_out
 aa:99.8% ab:0.157%
 Model converged het:0.00157 kcov:26.3 err:0.00401 model fit:0.866 len:1124307247
 ```
@@ -99,7 +99,7 @@ As you can see from our k-mer distribution (blue bars), we have here an extremel
 Let's look at another example, a plant: *Begonia luxurians*. Again, let's assume we know nothing about its genome:
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/Begonia_luxurians_k21.hist -o Bluxurians_k21_GS_out -k 21
+genomescope2.0/genomescope.R -i genomescope/histograms/Begonia_luxurians_k21.hist -o Bluxurians_k21_GS_out -k 21
 ```
 
 
@@ -126,15 +126,16 @@ Once we've made sure GenomeScope is installed and you can make it run, let's sta
 
 This exercise has one sole purpose - understanding the logic behind fitting genome models to k-mer spectra, in particular using GenomeScope genome model. 
 
-K-mer spectra can have many forms and shapes dependent on both biology and the sequencing technique, but let's use an idealised case - a k-mer spectra, that does not have any sequencing errors, or repetitive DNA. It has been manually constructed from a k-mer spectra of _Timema cristinae_ (all the sequencing reads associated with [this biosample](https://www.ncbi.nlm.nih.gov/biosample/6311760)). We calculaded k-mer spectra (as in the last tutorial) and then manually trimmed both sides so it is close to the "ideal case" (`/workspace/hitograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist`). This is how the idealised k-mer spectra looks like:
+K-mer spectra can have many forms and shapes dependent on both biology and the sequencing technique, but let's use an idealised case - a k-mer spectra, that does not have any sequencing errors, or repetitive DNA. It has been manually constructed from a k-mer spectra of _Timema cristinae_ (all the sequencing reads associated with [this biosample](https://www.ncbi.nlm.nih.gov/biosample/6311760)). We calculaded k-mer spectra (as in the last tutorial) and then manually trimmed both sides so it is close to the "ideal case" (`/workspace/histograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist`). This is how the idealised k-mer spectra looks like:
 
 ![simplified_linear_plot](https://user-images.githubusercontent.com/8181573/217258375-13116277-dcab-4487-be74-bdde167b03c1.png)
 
 See? All the k-mers are unique, the error rate is 0. It can't get much better, so, let's fit an analogous model ouserlves. So, open R, load the k-mer spectra and plot it. From now on, all the code is going to be in `R`.
 
 ```R
-ideal_kmer_spec <- read.table('/workspace/hitograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist', col.names = c('cov', 'freq'))
+ideal_kmer_spec <- read.table('/workspace/genomescope/histograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist', col.names = c('cov', 'freq'))
 plot(ideal_kmer_spec$cov, ideal_kmer_spec$freq, type = 'l', xlab = 'Coverage', ylab = 'Frequency', main = 'ideal')
+dev.off()
 ```
 
 Of course, this looks the same as... the plot above (it's mostly that you see that the data is really the same).
@@ -200,6 +201,7 @@ and now we can finally plot it.
 ```R
 plot(ideal_kmer_spec$cov, ideal_kmer_spec$freq, type = 'l', xlab = 'Coverage', ylab = 'Frequency', main = 'ideal')
 lines(ideal_kmer_spec$cov, gm1_y, lty = 2, col = 'red')
+dev.off()
 ```
 
 Does the model fit well the data? Ya, but there are so many annoying things about it... for instance, what is the genome size? Or what is the heterozygosity? Let's make a few last modification so the model will give us these estimates too.
@@ -236,7 +238,7 @@ Can you spot what's the effect of the "unidelised version"? Is the fit still goo
   <summary>Solution </summary>
 
 ```R
-real_kmer_spec <- read.table('/workspace/hitograms/advanced/Timema/Timema_cristinae_kmer_k21.hist', col.names = c('cov', 'freq'))
+real_kmer_spec <- read.table('/workspace/genomescope/histograms/advanced/Timema/Timema_cristinae_kmer_k21.hist', col.names = c('cov', 'freq'))
 x <- real_kmer_spec$cov
 y <- real_kmer_spec$freq
 k <- 21 
