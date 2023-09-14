@@ -108,7 +108,7 @@ In this case we have a much more heterozygous genome, and it looks diploid. Look
 
 #### Try it on your own
 
-There are a few more histogrmas here. Try to fit the models right. Play with `-p` if necessary 
+There are a few more histogrmas here. Try to fit the models right.
 
 <details>
 <summary><b> Unfold here to see all the histograms</b></summary>
@@ -116,30 +116,63 @@ There are a few more histogrmas here. Try to fit the models right. Play with `-p
 *Bombina sp.* (frog)
 
 ```
-genomescope2.0/genomescope.R -i genomescope/histograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
+genomescope2.0/genomescope.R -i genomescope/hitograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
 ```
 
 ![Screenshot 2023-09-15 at 00 59 19](https://github.com/BGAcademy23/genomescope/assets/28604909/9c0817c8-0902-4c20-b87d-e83ada2e3ebb)
 
 Another well-behaved diploid! What differences can you see between *B. luxurians* and this one?
 
+*Fragaria iinumae* (strawberry)
+```genomescope2.0/genomescope.R -i genomescope/hitograms/Fragaria_iinumae_k21
+.hist -o Fiinumae_k21_GS_out -k 21```
+
+
 
 *Letharia vulpina* (lichen)
 We will definitely be expecting something odd in the lichen. Why?
 
 ```
-genomescope2.0/genomescope.R -i genomescope/histograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
+genomescope2.0/genomescope.R -i genomescope/hitograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
 ```
 
+![Screenshot 2023-09-15 at 01 05 19](https://github.com/BGAcademy23/genomescope/assets/28604909/1c14094f-38fb-471a-817e-2f66e56a01b4)
 
+That's right! 3 peaks. We've got more than one genome here! What can we do?
 
-*Fragaria iinumae* (strawberry)
 
 </details>
 
 ### Modifying GenomeScope parameters for a better model fit
 
-Once we are familiar with different genome models, let's start modelling our with our own-generated `SRR3265401.21.kmc.hist` 
+Once we are familiar with different genome models, let's start playing with some parameters to improve our model fits.
+
+Let's get back to our lichen dataset
+
+
+modelling our with our own-generated `SRR3265401.21.kmc.hist`. Again, let's assume we have a
+
+
+Another parameter that does impact the modeling is the **maximal counter value** (`-cx` with KMC, `-m` with GenomeScope). This is roughly equivalent to truncating the histogram at that value. Smaller -cs values can have a pretty dramatic impact on genome modeling. To see this, lets try re-running KMC with a much smaller value (-cs100). 
+
+This is how a histogram on default max counter value looks like (`-cs10000`, `-m 10000`)
+
+<img width="868" alt="Screenshot 2023-09-15 at 01 20 33" src="https://github.com/BGAcademy23/genomescope/assets/28604909/23ff63c3-7cff-45b4-b16a-30a9bb157d96">
+
+This is how it would look like if we changed it into `-cs100`
+
+<img width="861" alt="Screenshot 2023-09-15 at 01 20 52" src="https://github.com/BGAcademy23/genomescope/assets/28604909/a291d1dc-4a9c-49a7-a955-f6553f4d5b42">
+
+The differences aren't quite too dramatic, but you can still see that the genome size estimate decreases by over 16mbp. This would be even more evident with a more repetitive genome. 
+
+Try changing the `-m` values in any of our previous GenomeScope runs (default `-m 10000`) to a much lower one. How does this affect the model?
+
+Why would you ever want to truncate the .hist file?? Because it makes the file smaller and speeds up the modeling. All valid reasons, but I think it's worth a few extra seconds and a little bit more space for more accurate genome models. 
+
+
+
+
+
 
 ### Fitting your own model
 
