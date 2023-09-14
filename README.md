@@ -40,3 +40,7 @@ By the end of this session you will be able to:
     Please also read the description carefully to see if this session is relevant to you.
     
     If you don't meet the prerequisites or change your mind based on the description or are no longer available at the session time, please email tol-training at sanger.ac.uk to cancel your slot so that someone else on the waitlist might attend.
+
+### (optional) Generating k-mer spectra using KMC and FastK
+
+This section is just to show you how to get a k-mer spectrum out of reads.
