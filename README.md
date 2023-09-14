@@ -41,6 +41,57 @@ By the end of this session you will be able to:
     
     If you don't meet the prerequisites or change your mind based on the description or are no longer available at the session time, please email tol-training at sanger.ac.uk to cancel your slot so that someone else on the waitlist might attend.
 
+## Practical session 1
+### Setting up your environment using GitPod
+
 ### (optional) Generating k-mer spectra using KMC and FastK
 
-This section is just to show you how to get a k-mer spectrum out of reads.
+This section is just to show you how to get a k-mer spectrum out of reads. You don't need to do this for the practical, but just in case you'd like to learn how to run a k-mer counter, here's an example of a KMC run (k=21) on yeast short-read datasets (SRR3265401). You can find these .fastq files in your GitPod workspace (workspace/data).
+
+```
+SAMPLE=SRR3265401
+mkdir -p tmp
+
+ls data/"$SAMPLE"* > FILES
+kmc -k21 -t2 -m96 -ci1 -cs1000000 -fq @FILES $SAMPLE.21.kmc tmp/
+
+kmc_tools transform $SAMPLE.21.kmc histogram $SAMPLE.21.kmc.hist -cx1000000
+```
+Have a look at the histogram file that was generated with the KMC transform command:
+
+![Screenshot 2023-09-14 at 23 20 26](https://github.com/BGAcademy23/genomescope/assets/28604909/744e0a4c-7aea-4528-a636-831ca411bb9d)
+
+This will be our input for GenomeScope! 
+
+### Fitting genome models to your kmer spectrum using GenomeScope
+Now you have your own generated .hist (SRR3265401) and many others in the `workspace/histograms/` directory to play with.
+Let's start by making sure GenomeScope works fine by typing `genomescope2.0/genomescope.R` from the workspace:
+![Screenshot 2023-09-14 at 23 39 31](https://github.com/BGAcademy23/genomescope/assets/28604909/481a59bf-957b-45d4-a4d4-1ad8a956a173)
+
+As you can see, the only necessary parameters are the input and `-k`. It recommends naming the output directory and specifying the ploidy level, otherwise it is going to assume diploid. There's other parameters such as `-l` and '-m', which we will talk about later.
+
+#### example 1
+Once we've made sure GenomeScope is installed and you can make it run, let's start modelling our with our own-generated `SRR3265401.21.kmc.hist` :
+
+```
+
+```
+
+This is a simple case we show you
+
+#### example 2
+
+This is more complicated case we show you
+
+#### Try it on your own
+
+There are 5 more histogrmas here. Try to fit models right.
+
+<details>
+<summary><b> Unfold here to see all the histograms</b></summary>
+
+
+</details>
+
+### Modifying GenomeScope parameters for a better model fit
+
