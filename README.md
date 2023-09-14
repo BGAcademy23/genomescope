@@ -114,13 +114,32 @@ There are a few more histogrmas here. Try to fit the models right. Play with `-p
 <summary><b> Unfold here to see all the histograms</b></summary>
 
 *Bombina sp.* (frog)
-#### 
-####
+
+```
+genomescope2.0/genomescope.R -i genomescope/hitograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
+```
+
+![Screenshot 2023-09-15 at 00 59 19](https://github.com/BGAcademy23/genomescope/assets/28604909/9c0817c8-0902-4c20-b87d-e83ada2e3ebb)
+
+Another well-behaved diploid! What differences can you see between *B. luxurians* and this one?
+
+
+*Letharia vulpina* (lichen)
+We will definitely be expecting something odd in the lichen. Why?
+
+```
+genomescope2.0/genomescope.R -i genomescope/hitograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
+```
+
+
+
+*Fragaria iinumae* (strawberry)
+
 </details>
 
 ### Modifying GenomeScope parameters for a better model fit
 
-Once we've made sure GenomeScope is installed and you can make it run, let's start modelling our with our own-generated `SRR3265401.21.kmc.hist`
+Once we are familiar with different genome models, let's start modelling our with our own-generated `SRR3265401.21.kmc.hist` 
 
 ### Fitting your own model
 
