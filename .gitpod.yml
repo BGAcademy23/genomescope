@@ -16,7 +16,7 @@ tasks:
       # install genomescope2 (both package and executible script)
       git clone https://github.com/tbenavi1/genomescope2.0
       R -e 'install.packages("genomescope2.0", repos=NULL, type="source")'
-      install -c genomescope2.0/genomescope.R /workshop/bin
+      install -c genomescope2.0/genomescope.R /workspace/bin
 
       # install genomeTelescope R package
       git clone https://github.com/KamilSJaron/GenomeTelescope
