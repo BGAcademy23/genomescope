@@ -275,6 +275,21 @@ So, we did not model the error peak, but the coverage and heterozygosity is more
 
 **Estimate genome size**
 
+The basic GenomeScope estimates genome size as follow.
+
+1. Fit the model to things that occur in one to four genome copies; (you have done that for one to two genomic copies).
+2. Removing the residual errors from the k-mer spectra
+
 ```R
-TODO: genome size fit
+residuals <- y[1:40] - predict(gm3, newdata = list(x = 1:40))
+errors <- residuals[1:(which.min(residuals > 0) - 1)]
+y[1:length(errors)] <- y[1:length(errors)] - errors
 ```
+
+3. The genome size is `sum(coverages * frequencies) / (1n_coverage * ploidy)` from the cleaned spectra
+
+```R
+sum(x * y) / (2 * coef(gm3)['kcov'])
+```
+
+You see that counting repetitive k-mers indeed changes a lot the genome size estimate.
