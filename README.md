@@ -116,7 +116,7 @@ There are a few more histogrmas here. Try to fit the models right. Play with `-p
 *Bombina sp.* (frog)
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
+genomescope2.0/genomescope.R -i genomescope/histograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
 ```
 
 ![Screenshot 2023-09-15 at 00 59 19](https://github.com/BGAcademy23/genomescope/assets/28604909/9c0817c8-0902-4c20-b87d-e83ada2e3ebb)
@@ -128,7 +128,7 @@ Another well-behaved diploid! What differences can you see between *B. luxurians
 We will definitely be expecting something odd in the lichen. Why?
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
+genomescope2.0/genomescope.R -i genomescope/histograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
 ```
 
 
