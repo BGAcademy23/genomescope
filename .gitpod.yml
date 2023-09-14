@@ -12,6 +12,7 @@ tasks:
       # set up conda evironment with R and needed packages
       mamba create -n gs -c conda-forge r-base r-argparse r-minpack.lm -y
       mamba activate gs
+      mamba install -c bioconda kmc
 
       # install genomescope2 (both package and executible script)
       git clone https://github.com/tbenavi1/genomescope2.0
