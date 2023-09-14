@@ -101,3 +101,137 @@ There are 5 more histogrmas here. Try to fit models right.
 
 
 ### Fitting your own model
+
+This exercise has one sole purpose - understanding the logic behind fitting genome models to k-mer spectra, in particular using GenomeScope genome model. 
+
+K-mer spectra can have many forms and shapes dependent on both biology and the sequencing technique, but let's use an idealised case - a k-mer spectra, that does not have any sequencing errors, or repetitive DNA. It has been manually constructed from a k-mer spectra of _Timema cristinae_ (all the sequencing reads associated with [this biosample](https://www.ncbi.nlm.nih.gov/biosample/6311760)). We calculaded k-mer spectra (as in the last tutorial) and then manually trimmed both sides so it is close to the "ideal case" (`/workspace/hitograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist`). This is how the idealised k-mer spectra looks like:
+
+![simplified_linear_plot](https://user-images.githubusercontent.com/8181573/217258375-13116277-dcab-4487-be74-bdde167b03c1.png)
+
+See? All the k-mers are unique, the error rate is 0. It can't get much better, so, let's fit an analogous model ouserlves. So, open R, load the k-mer spectra and plot it. From now on, all the code is going to be in `R`.
+
+```R
+ideal_kmer_spec <- read.table('/workspace/hitograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist', col.names = c('cov', 'freq'))
+plot(ideal_kmer_spec$cov, ideal_kmer_spec$freq, type = 'l', xlab = 'Coverage', ylab = 'Frequency', main = 'ideal')
+```
+
+Of course, this looks the same as... the plot above (it's mostly that you see that the data is really the same).
+
+There are just two peaks, so the model we will fit will be something like
+
+```
+frequency ~ 1n peak +
+            2n peak
+```
+
+We could chose from various distributions to model the two peaks, but it just happens, that negative binomial, fits sequencing coverage very well. Negative bionomial has usually two parameters stopping parameter and the success probability, however, that is not a convinient notion for us, we will therefore use a reparametrised version of negative binomial with _mean_ 'mu', and 'size', the _dispersion parameter_. So in our model, we will fit mean, and the _dispersion parameter_ and the model can look like this
+
+```
+Probability ~ α NB(  kcov, dispersion) +
+              β NB(2*kcov, dispersion2)
+```
+
+Now, the α and β will be the contributions of the two peaks. Notice that we fit the mean of the first peak with the same parameter as the mean of the second peak s, just multiplied by a factor of 2. That is because the heterozygous loci have 1/2 of the coverage of the homozygous loci and therefore, we actually desire to co-estimate the haploid coverage jointly for both of the at the same time.
+
+There are still a few adjustments we need to do to the model to finally make a reasonable fit. In the last model we parametrise the dispersion parameters of the two models independently, that is however unnecessary - with increased coverage, the variance in sequencing depth increases too, but the "overdispersal" scales the same for the whole sequencing run. We therefore use the same trick we used for the coverage and fit the overdispersion as a single parameter scaled by the mean
+
+```
+Probability ~ α NB(  kcov,   kcov / overdispersion) +
+              β NB(2*kcov, 2*kcov / overdispersion)
+```
+
+There are a few more things to add, but this is a minimal viable product. So, we can attempt to fit this model using non-linear least squared method (`nls`). This is a process that is very similar to classical least square method, but instead of calculating the exact best fit, it iterates through a range of possible solutions and finds the best one among them. These techniques are powerful, for they can fit parameters to any kind of model really, but they are also very sensitive to the initial parameters and the strategy of the parameter search.
+
+**Fit and plot a basic model**
+
+```R
+y <- ideal_kmer_spec$freq
+x <- ideal_kmer_spec$cov
+gm1 <- nls(y ~ a * dnbinom(x, size = kcov   / overdispersion, mu = kcov    ) +
+               b * dnbinom(x, size = kcov*2 / overdispersion, mu = kcov * 2),
+           start = list(a = 300e6, b = 500e6, kcov = 25, overdispersion = 0.5),
+           control = list(minFactor=1e-12, maxiter=40))
+
+summary(gm1)
+```
+
+<details> 
+  <summary>Model interpretation </summary>
+
+Alright, we see that `a` (my `α`) is about 1/2 of `b` (`β`). That means there is about twice as much homozygous to heterozygous k-mers (the estimates are the estimates of how many exactly). We also see that the k-mer coverage is 27.6x. That is already quite some information, but nothing really 
+</details>
+
+To plot the model, we need to get the values predicted within the range of our data. Let let's define the model as a function
+
+```R
+predict_basic_model <- function(x, a, b, kcov, overdispersion){
+    a * dnbinom(x, size = kcov   / overdispersion, mu = kcov    ) +
+    b * dnbinom(x, size = kcov*2 / overdispersion, mu = kcov * 2)
+}
+
+gm1_coef <- coef(gm1)
+gm1_y <- predict_basic_model(x, gm1_coef['a'], gm1_coef['b'], gm1_coef['kcov'], gm1_coef['overdispersion'])
+```
+
+and now we can finally plot it.
+
+```R
+plot(ideal_kmer_spec$cov, ideal_kmer_spec$freq, type = 'l', xlab = 'Coverage', ylab = 'Frequency', main = 'ideal')
+lines(ideal_kmer_spec$cov, gm1_y, lty = 2, col = 'red')
+```
+
+Does the model fit well the data? Ya, but there are so many annoying things about it... for instance, what is the genome size? Or what is the heterozygosity? Let's make a few last modification so the model will give us these estimates too.
+
+**Fit a model that estimates heterozygosity**
+
+We can express α and β using probability of a heterozygous nucleotide (r) and the k-mer length (k). Look at the cascade of following expressions
+
+![Screenshot 2023-02-07 at 13 17 51](https://user-images.githubusercontent.com/8181573/217258225-a3927db7-e8e4-484a-9a03-b78f7be0110c.png)
+
+With this we could estimate the heterozygosity using `k` as a constant, while assuming that the heteorzygosity (probability of a nucleotidy being heterozygous) is the same for each nucleotide across the genome. Note there is a one less parameter too, instead of α and β (or `a` and `b`), there is just `r`, but there is one more consideration - while our previous model features large α and β coeficients, this model expects them to be relative proportions of the two peaks (the probability of heterozygous vs homozygous k-mers), which means we need to multiple the joint distribution by the genome length - this will be a one more added parameter to the equation, leading to the same total number as it was in the last case.
+
+```R
+k <- 21
+gm2 <- nls(y ~ ((2*(1-(1-r)^k)) * dnbinom(x, size = kcov   / overdispersion, mu = kcov    ) +
+                ((1-r)^k)       * dnbinom(x, size = kcov*2 / overdispersion, mu = kcov * 2)) * length,
+           start = list(r = 0, kcov = 25, overdispersion = 0.5, length = 1000e6),
+           control = list(minFactor=1e-12, maxiter=40))
+summary(gm2)
+```
+
+So, what do you think? The heterozygosity seems to be in the right ballpark (0.99% by GenomeScope vs 0.98% by our model), K-mer coverage is 27.6x in both models, and the genome size is also remarkably similar ~760Mbp.
+
+
+**Fit real data**
+
+Till now we had an idealised case - trimmed of all repetitions and errors. In truth, the unidealised version of the k-mer spectra still looks pretty good: 
+
+![real_linear_plot](https://user-images.githubusercontent.com/8181573/217610706-8a9c1cc1-3b93-408c-8bb7-11efa70123af.png)
+
+Can you spot what's the effect of the "unidelised version"? Is the fit still good? Which estimated values get affected the most? Look at the genome size! What happens if you fit your own model to the full k-mer spectra? Load that k-mer spectra and fit the model and compare it to the estimates by genomescope.
+
+<details> 
+  <summary>Solution </summary>
+
+```R
+real_kmer_spec <- read.table('/workspace/hitograms/advanced/Timema/Timema_cristinae_kmer_k21.hist', col.names = c('cov', 'freq'))
+x <- real_kmer_spec$cov
+y <- real_kmer_spec$freq
+k <- 21 
+
+gm3 <- nls(y ~ ((2*(1-(1-r)^k)) * dnbinom(x, size = kcov   / overdispersion, mu = kcov    ) +
+                ((1-r)^k)       * dnbinom(x, size = kcov*2 / overdispersion, mu = kcov * 2)) * length,
+           start = list(r = 0, kcov = 25, overdispersion = 0.5, length = 1000e6),
+           control = list(minFactor=1e-12, maxiter=40))
+summary(gm3)
+```
+
+</details>
+
+So, we did not model the error peak, but the coverage and heterozygosity is moreless right. This is in part because there are not many duplications in the genome (no bumps around 3n and 4n coverages), but also the majority of this estimate does come from the unique portion of the genome. However, our model, unlike GenomeScope still underestimates the genome size!
+
+**Estimate genome size**
+
+```R
+TODO: genome size fit
+```
