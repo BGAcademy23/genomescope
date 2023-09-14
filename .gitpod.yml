@@ -25,8 +25,6 @@ tasks:
       # download yeast data
       mkdir -p data && wget -P data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR326/001/SRR3265401/SRR3265401_[12].fastq.gz
 
-      gp sync-done install
-
   - name: activate mamba
     command: |
       /workspace/conda/bin/mamba init bash
