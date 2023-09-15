@@ -41,10 +41,17 @@ By the end of this session you will be able to:
     
     If you don't meet the prerequisites or change your mind based on the description or are no longer available at the session time, please email tol-training at sanger.ac.uk to cancel your slot so that someone else on the waitlist might attend.
 
-## Practical session 1
-### Setting up your environment using GitPod
+## Setting up the GitPod environment
 
-### (optional) Generating k-mer spectra using KMC and FastK
+Open the [GitPod webpage](https://gitpod.io/). Click on "Try for Free", then click on "New Workspace", type to the url `github.com/BGAcademy23/genomescope` and finally hit `Continue` button. The worksspace will be created with the software installed and data avaialbe.
+
+If you would like to install the tools at your own computer or cluster, you can take a look at [the configuration .yml file](https://github.com/BGAcademy23/genomescope/blob/main/.gitpod.yml) we used to set up the gitpod. These commands are setting up a conda environment with kmc, R and a bunch of r-packages, then fetching GenomeScope from GitHub and installing it. You should be able to follow similar steps to get a similar evironment anywhere you like.
+
+## Practical session 1
+
+This session is mostly to get you familiar with running GenomeScope in terminal. For completeness sake, we also show how k-mer spectra can be generated using KMC, but there are many tutorial on k-mer spetra generation out there. You can skip that part and start directly with modeling. 
+
+### (optional) Generating k-mer spectra using KMC
 
 This section is just to show you how to get a k-mer spectrum out of reads. You don't need to do this for the practical, but just in case you'd like to learn how to run a k-mer counter, here's an example of a [KMC](https://github.com/refresh-bio/KMC) run (k=21) on yeast short-read datasets (SRR3265401). You can find these `.fastq.gz` files in your GitPod workspace (`workspace/data`).
 
