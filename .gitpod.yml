@@ -12,20 +12,19 @@ tasks:
       # set up conda evironment with R and needed packages
       mamba create -n gs -c conda-forge r-base r-argparse r-minpack.lm -y
       mamba activate gs
+      mamba install -c bioconda kmc -y
 
       # install genomescope2 (both package and executible script)
       git clone https://github.com/tbenavi1/genomescope2.0
       R -e 'install.packages("genomescope2.0", repos=NULL, type="source")'
-      install -c genomescope2.0/genomescope.R /workshop/bin
+      install -c genomescope2.0/genomescope.R /workspace/bin
 
       # install genomeTelescope R package
       git clone https://github.com/KamilSJaron/GenomeTelescope
       R -e 'install.packages("GenomeTelescope", repos=NULL, type="source")'
 
       # download yeast data
-      mkdir -p data && wget -P data ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR326/001/SRR3265401/SRR3265401_[12].fastq.gz
-
-  - name: activate mamba
+      mkdir -p data && wget -P data https://sk13.cog.sanger.ac.uk/SRR3265401_{1,2}.fastq.gz
     command: |
       /workspace/conda/bin/mamba init bash
       source ${HOME}/.bashrc
