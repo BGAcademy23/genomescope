@@ -115,7 +115,7 @@ As you can see from our k-mer distribution (blue bars), we have here an extremel
 Let's look at another example, a plant: *Begonia luxurians*. Again, let's assume we know nothing about its genome:
 
 ```
-genomescope2.0/genomescope.R -i genomescope/histograms/Begonia_luxurians_k21.hist -o Bluxurians_k21_GS_out -k 21
+genomescope.R -i genomescope/histograms/Begonia_luxurians_k21.hist -o Bluxurians_k21_GS_out -k 21
 ```
 
 
