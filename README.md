@@ -75,17 +75,24 @@ The first column is the coverage, that is how many times a kmer is seen in the s
 
 ### Fitting genome models to your kmer spectrum using GenomeScope
 Now you have your own generated .hist (SRR3265401) and many others in the `workspace/histograms/` directory to play with.
-Let's start by making sure GenomeScope works fine by typing `genomescope2.0/genomescope.R` from the workspace:
+Let's start by making sure GenomeScope works fine by typing in terminal
+
+```
+genomescope.R
+```
+
+You should see something like
 
 ![Screenshot 2023-09-14 at 23 39 31](https://github.com/BGAcademy23/genomescope/assets/28604909/481a59bf-957b-45d4-a4d4-1ad8a956a173)
 
-As you can see, the only necessary parameters are the input and `-k`. It recommends naming the output directory and specifying the ploidy level (`-p`), otherwise it is going to assume diploid. There's other parameters such as `-l` and '-m', which we will talk about later.
+The only necessary parameters are the input and `-k`. It recommends naming the output directory and specifying the ploidy level (`-p`), otherwise it is going to assume diploid. There's other parameters such as `-l` and `-m`, which we will talk about later.
 
-#### Example 1
+#### Example 1 - stick insect
+
 Let's start with one of the histograms from `workspace/histograms/`: the stick insect *Timema monikensis*. Let's assume we know nothing about its genome, and just run GenomeScope with default parameters:
 
 ```
-genomescope2.0/genomescope.R -i genomescope/histograms/Timema_monikensis_k21.hist -o Tmonikensis_k21_GS_out -k 21
+genomescope.R -i genomescope/histograms/Timema_monikensis_k21.hist -o Tmonikensis_k21_GS_out -k 21
 
 ```
 As you can see, after running you will get a printed message with the model fit data:
@@ -101,7 +108,7 @@ Let's have a look at our histogram `(linear.plot.png)`:
 
 As you can see from our k-mer distribution (blue bars), we have here an extremelly haploid individual. Even though our heterozygosity levels are also very low in our model, we can see it doesn't adjust very well to a "diploid" model because of its extremelly high homozygosity. You can try changing your command to add `-p 1` to see if a haploid model works best. How else does the model change? does genome size estimate change much?
 
-#### Example 2
+#### Example 2 - begonia
 
 Let's look at another example, a plant: *Begonia luxurians*. Again, let's assume we know nothing about its genome:
 
@@ -120,10 +127,10 @@ There are a few more histogrmas here. Try to fit the models right.
 <details>
 <summary><b> Unfold here to see all the histograms</b></summary>
 
-*Bombina sp.* (frog)
+*Bombina sp.* (toad)
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
+genomescope.R -i genomescope/histograms/bombina_sp_k21.hist -o Bombinasp_k21_GS_out -k 21
 ```
 
 ![Screenshot 2023-09-15 at 00 59 19](https://github.com/BGAcademy23/genomescope/assets/28604909/9c0817c8-0902-4c20-b87d-e83ada2e3ebb)
@@ -135,7 +142,7 @@ Another well-behaved diploid! What differences can you see between *B. luxurians
 We will definitely be expecting something odd in the lichen. Why?
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
+genomescope.R -i genomescope/histograms/Letharia_vulpina_k21.hist -o Lvulpina_k21_GS_out -k 21
 ```
 
 ![Screenshot 2023-09-15 at 01 05 19](https://github.com/BGAcademy23/genomescope/assets/28604909/1c14094f-38fb-471a-817e-2f66e56a01b4)
@@ -145,8 +152,9 @@ It is obvious there are no genome models that count on more than one genome in o
 
 
 *Fragaria iinumae* (strawberry)
+
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/Fragaria_iinumae_k21.hist -o Fiinumae_k21_GS_out -k 21
+genomescope.R -i genomescope/histograms/Fragaria_iinumae_k21.hist -o Fiinumae_k21_GS_out -k 21
 ```
 
 ![Screenshot 2023-09-15 at 01 51 43](https://github.com/BGAcademy23/genomescope/assets/28604909/4ed2c0a4-152f-44ce-9f50-261b16fd3ec0)
@@ -161,16 +169,16 @@ Right! here we also see something odd... It looks like part of our true kmers ar
 Once we are familiar with different genome models, let's start playing with some parameters to improve our model fits. Let's go back to our strawberry plot. It looks like the small peak we see covered by the errors is right at half coverage (~150x) of the main peak (~300x). This is likely a monoploid (1n) peak that needs to be considered by our model. We can tell GenomeScope the **estimated coverage of our 1n peak*** by using the `-l` parameter:
 
 ```
-genomescope2.0/genomescope.R -i genomescope/hitograms/Fragaria_iinumae_k21.hist -o Fiinumae_k21_GS_out -k 21 -l 150
+genomescope.R -i genomescope/histograms/Fragaria_iinumae_k21.hist -o Fiinumae_k21_GS_out -k 21 -l 150
 ```
 Now it looks better!
 
 ![Screenshot 2023-09-15 at 01 59 48](https://github.com/BGAcademy23/genomescope/assets/28604909/559cd904-2b98-4207-be3b-c37f0b7bcc26)
 
-Getting the 1n peak right is essential to get a good model fit. Another factor to take into account is **ploidy** (`-p`). Let's now try modelling our own-generated `SRR3265401.21.kmc.hist` dataset (it is also in the `workspace/histograms/` directory if you haven't run KMC):
+Getting the 1n peak right is essential to get a good model fit. Another factor to take into account is **ploidy** (`-p`). Let's now try modelling our own-generated `SRR3265401.21.kmc.hist` dataset (it is also in the `genomescope/histograms/` directory if you haven't run KMC):
 
 ```
-genomescope2.0/genomescope.R -i SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out -k 21
+genomescope.R -i genomescope/histograms/SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out -k 21
 ```
 
 ![Screenshot 2023-09-15 at 02 08 41](https://github.com/BGAcademy23/genomescope/assets/28604909/c1373cb7-3ef1-4aeb-ad19-7f5a174c8495)
@@ -178,7 +186,7 @@ genomescope2.0/genomescope.R -i SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out 
 There's again something odd here. As in the strawberry plot we can see an extra, lower coverage peak not considered by the model. However in this case it is not half the coverage of our main peak but ~1/4. This is when we start considering we may not be dealing with a diploid genome! Let's play with `-p`:
 
 ```
-genomescope2.0/genomescope.R -i SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out -k 21 -p 4
+genomescope.R -i genomescope/histograms/SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out -k 21 -p 4
 ```
 
 ![Screenshot 2023-09-15 at 02 15 27](https://github.com/BGAcademy23/genomescope/assets/28604909/ff1279cf-b62a-45e5-bd62-65b3118d785c)
@@ -201,14 +209,11 @@ Try changing the `-m` values in any of our previous GenomeScope runs (default `-
 
 Why would you ever want to truncate the .hist file?? Because it makes the file smaller and speeds up the modeling. All valid reasons, but I think it's worth a few extra seconds and a little bit more space for more accurate genome models. 
 
+## Practical session 2
 
+This exercise has one sole purpose - understanding the logic behind fitting genome models to k-mer spectra, in particular using GenomeScope genome model, by reimplementing a bit simplified version of the model yourselves! 
 
-
-
-
-### Fitting your own model
-
-This exercise has one sole purpose - understanding the logic behind fitting genome models to k-mer spectra, in particular using GenomeScope genome model. 
+### Loading k-mer spectra in R and plotting it
 
 K-mer spectra can have many forms and shapes dependent on both biology and the sequencing technique, but let's use an idealised case - a k-mer spectra, that does not have any sequencing errors, or repetitive DNA. It has been manually constructed from a k-mer spectra of _Timema cristinae_ (all the sequencing reads associated with [this biosample](https://www.ncbi.nlm.nih.gov/biosample/6311760)). We calculaded k-mer spectra (as in the last tutorial) and then manually trimmed both sides so it is close to the "ideal case" (`/workspace/histograms/advanced/Timema/Timema_cristinae_kmer_k21_simplified.hist`). This is how the idealised k-mer spectra looks like:
 
