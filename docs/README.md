@@ -16,6 +16,8 @@ Kamil Jaron
 - Discussion/Interpretation of wild k-mer spectra (~20')
     - We will bring a bunch of examples; but feel free to bring your own wild k-mer spoectrum to share with others!
 
+## [Tutorial](https://github.com/BGAcademy23/genomescope/blob/main/README.md)
+
 ## Description
 
 By the end of this session you will be able to:
