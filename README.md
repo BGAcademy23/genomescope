@@ -364,4 +364,11 @@ y[1:length(errors)] <- y[1:length(errors)] - errors
 sum(x * y) / (2 * coef(gm3)['kcov'])
 ```
 
-You see that counting repetitive k-mers indeed changes a lot the genome size estimate.
+From 764Mbp, we ramped up the genome size estimate to 1,149 Mbp. You see that counting repetitive k-mers indeed changes the estimate a lot, which perhaps does not come as surprise, given how many repetitions genomes have.
+
+Notice also how closely our, fairly simple, model reassemble, the sligly more sophisticaed model of genomescope (1,114 Mbp). A similar problem is also caused if the k-mer spectra is turnicated (as explained above with `-cs` parameter to `kmc`). See [this blogpost](https://kamilsjaron.github.io/peculiar-genomic-observations/biological/2020/01/crayfish.html) to grasp the full extend of this problem.
+
+## Conclusions
+
+So, if you got all the way here, and you understand what you have done, you have a very good understanding of how GenomeScope operates. THe principle is failrly understandable, but the combinatoris get a lot crazier for poplyploid models implemented in `GenomeScope2.0`. There are also several other models based on very different ideas, such rethinking the whole problem from the perspective of population genetics (Check [tetmer](https://github.com/hannesbecher/shiny-k-mers)). And there will surely be more to come, but this is it for now!
+
