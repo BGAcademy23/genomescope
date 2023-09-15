@@ -43,9 +43,11 @@ By the end of this session you will be able to:
 
 ## Setting up the GitPod environment
 
-Open the [GitPod webpage](https://gitpod.io/). Click on "Try for Free", then click on "New Workspace", type to the url `github.com/BGAcademy23/genomescope` and finally hit `Continue` button. The worksspace will be created with the software installed and data avaialbe.
+Open the [GitPod webpage](https://gitpod.io/). Click on "Try for Free", then click on "New Workspace", type to the url `github.com/BGAcademy23/genomescope` and finally hit `Continue` button. Whem GitPod open ther might be about 3' of installation logs running in the command line, but eventually the workspace will be created with the software installed and data avaialbe. It should look like this
 
-If you would like to install the tools at your own computer or cluster, you can take a look at [the configuration .yml file](https://github.com/BGAcademy23/genomescope/blob/main/.gitpod.yml) we used to set up the gitpod. These commands are setting up a conda environment with kmc, R and a bunch of r-packages, then fetching GenomeScope from GitHub and installing it. You should be able to follow similar steps to get a similar evironment anywhere you like.
+![Screenshot 2023-09-15 at 08 21 31](https://github.com/BGAcademy23/genomescope/assets/8181573/961e9219-a49c-4c4f-8b62-82911644865a)
+
+Note you can click on the small arrow next to `genomescope` directory and then on `README.md` to have this README file opened directly in GitPod. If you would like to eventually install the tools at your own computer or cluster, you can take a look at [the configuration .yml file](https://github.com/BGAcademy23/genomescope/blob/main/.gitpod.yml) we used to set up the gitpod. These commands are setting up a conda environment with kmc, R and a bunch of r-packages, then fetching GenomeScope from GitHub and installing it. You should be able to follow similar steps to get a similar evironment anywhere you like.
 
 ## Practical session 1
 
