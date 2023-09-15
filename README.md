@@ -123,12 +123,6 @@ genomescope2.0/genomescope.R -i genomescope/hitograms/bombina_sp_k21.hist -o Bom
 
 Another well-behaved diploid! What differences can you see between *B. luxurians* and this one?
 
-*Fragaria iinumae* (strawberry)
-```genomescope2.0/genomescope.R -i genomescope/hitograms/Fragaria_iinumae_k21
-.hist -o Fiinumae_k21_GS_out -k 21```
-
-
-
 *Letharia vulpina* (lichen)
 We will definitely be expecting something odd in the lichen. Why?
 
@@ -139,19 +133,49 @@ genomescope2.0/genomescope.R -i genomescope/hitograms/Letharia_vulpina_k21.hist 
 ![Screenshot 2023-09-15 at 01 05 19](https://github.com/BGAcademy23/genomescope/assets/28604909/1c14094f-38fb-471a-817e-2f66e56a01b4)
 
 That's right! 3 peaks. We've got more than one genome here! What can we do?
+It is obvious there are no genome models that count on more than one genome in one sample... So to properly do a model fit we would have to separate the reads/kmers first with something like blobtoolkit.
 
+
+*Fragaria iinumae* (strawberry)
+```
+genomescope2.0/genomescope.R -i genomescope/hitograms/Fragaria_iinumae_k21.hist -o Fiinumae_k21_GS_out -k 21
+```
+
+![Screenshot 2023-09-15 at 01 51 43](https://github.com/BGAcademy23/genomescope/assets/28604909/4ed2c0a4-152f-44ce-9f50-261b16fd3ec0)
+
+Right! here we also see something odd... It looks like part of our true kmers are in the "errors", which is definitely affecting our model...
 
 </details>
 
+
 ### Modifying GenomeScope parameters for a better model fit
 
-Once we are familiar with different genome models, let's start playing with some parameters to improve our model fits.
+Once we are familiar with different genome models, let's start playing with some parameters to improve our model fits. Let's go back to our strawberry plot. It looks like the small peak we see covered by the errors is right at half coverage (~150x) of the main peak (~300x). This is likely a monoploid (1n) peak that needs to be considered by our model. We can tell GenomeScope the **estimated coverage of our 1n peak*** by using the `-l` parameter:
 
-Let's get back to our lichen dataset
+```
+genomescope2.0/genomescope.R -i genomescope/hitograms/Fragaria_iinumae_k21.hist -o Fiinumae_k21_GS_out -k 21 -l 150
+```
+Now it looks better!
 
+![Screenshot 2023-09-15 at 01 59 48](https://github.com/BGAcademy23/genomescope/assets/28604909/559cd904-2b98-4207-be3b-c37f0b7bcc26)
 
-modelling our with our own-generated `SRR3265401.21.kmc.hist`. Again, let's assume we have a
+Getting the 1n peak right is essential to get a good model fit. Another factor to take into account is **ploidy** (`-p`). Let's now try modelling our own-generated `SRR3265401.21.kmc.hist` dataset (it is also in the `workspace/histograms/` directory if you haven't run KMC):
 
+```
+genomescope2.0/genomescope.R -i SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out -k 21
+```
+
+![Screenshot 2023-09-15 at 02 08 41](https://github.com/BGAcademy23/genomescope/assets/28604909/c1373cb7-3ef1-4aeb-ad19-7f5a174c8495)
+
+There's again something odd here. As in the strawberry plot we can see an extra, lower coverage peak not considered by the model. However in this case it is not half the coverage of our main peak but ~1/4. This is when we start considering we may not be dealing with a diploid genome! Let's play with `-p`:
+
+```
+genomescope2.0/genomescope.R -i SRR3265401.21.kmc.hist -o SRR3265401_k21_GS_out -k 21 -p 4
+```
+
+![Screenshot 2023-09-15 at 02 15 27](https://github.com/BGAcademy23/genomescope/assets/28604909/ff1279cf-b62a-45e5-bd62-65b3118d785c)
+
+This does look better, looks like our yeast is tetraploid. Testing different ploidy models is always helpful when our k-mer distribution shows peaks that are not being included in the model. 
 
 Another parameter that does impact the modeling is the **maximal counter value** (`-cx` with KMC, `-m` with GenomeScope). This is roughly equivalent to truncating the histogram at that value. Smaller -cs values can have a pretty dramatic impact on genome modeling. To see this, lets try re-running KMC with a much smaller value (-cs100). 
 
