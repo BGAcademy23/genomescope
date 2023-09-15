@@ -123,6 +123,7 @@ genomescope2.0/genomescope.R -i genomescope/hitograms/bombina_sp_k21.hist -o Bom
 
 Another well-behaved diploid! What differences can you see between *B. luxurians* and this one?
 
+
 *Letharia vulpina* (lichen)
 We will definitely be expecting something odd in the lichen. Why?
 
