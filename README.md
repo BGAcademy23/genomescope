@@ -43,7 +43,9 @@ By the end of this session you will be able to:
 
 ## Setting up the GitPod environment
 
-Open the [GitPod webpage](https://gitpod.io/). Click on "Try for Free", then click on "New Workspace", type to the url `github.com/BGAcademy23/genomescope` and finally hit `Continue` button. Whem GitPod open ther might be about 3' of installation logs running in the command line, but eventually the workspace will be created with the software installed and data avaialbe. It should look like this
+Click on the [following link](https://gitpod.io/new#https://github.com/BGAcademy23/genomescope). It should bring you to GitPod webpage and directly guide you to create a new workspace using GenomeScope tutoruial set up. Just click on continue and that's it. If for some reason you appear on the GitPod webpage and the opening window did not show up. Click on "Try for Free", log in with your GitHub account, then click on "New Workspace", type to the url `github.com/BGAcademy23/genomescope` and finally hit `Continue` button. 
+
+Whem GitPod opens, there might be about 3 minutes of installation logs running in the command line, but eventually the workspace will be created with the software installed and data avaialbe. It should look like this
 
 ![Screenshot 2023-09-15 at 08 21 31](https://github.com/BGAcademy23/genomescope/assets/8181573/961e9219-a49c-4c4f-8b62-82911644865a)
 
